@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>模型训练 - 变异测试系统</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+<header class="nav">
+    <div class="nav-title">变异测试实验平台</div>
+    <nav class="nav-links">
+        <a th:href="@{/home}">主界面</a>
+        <a th:href="@{/algorithm}">算法简介</a>
+        <a th:href="@{/experiment}" class="active">实验演示</a>
+    </nav>
+</header>
+<main class="layout-center">
+    <section class="card">
+        <h1 class="page-title">模型训练</h1>
+        <form th:action="@{/model/train}" method="post" class="form-inline">
+            <label for="modelName">模型选择：</label>
+            <select id="modelName" name="modelName">
+                <option value="CNN">CNN</option>
+                <option value="DNN">DNN</option>
+                <option value="RNN">RNN</option>
+            </select>
+            <button type="submit" class="btn-primary">开始训练</button>
+        </form>
+
+        <section class="section-block">
+            <h2>训练结果</h2>
+            <div th:if="${results != null and #lists.size(results) > 0}">
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th>模型名称</th>
+                        <th>MSE</th>
+                        <th>U 统计量</th>
+                        <th>IA 统计量</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="r : ${results}">
+                        <td th:text="${r.modelName}"></td>
+                        <td th:text="${r.mseValue}"></td>
+                        <td th:text="${r.uStatistic}"></td>
+                        <td th:text="${r.iaStatistic}"></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+            <p th:if="${results == null or #lists.size(results) == 0}" class="muted">
+                尚未开始训练，请选择模型并点击“开始训练”。
+            </p>
+        </section>
+
+        <section class="section-block image-grid">
+            <div>
+                <h3>MSE 结果</h3>
+                <img src="/images/MSE结果.png" alt="MSE结果">
+            </div>
+            <div>
+                <h3>U 统计量结果</h3>
+                <img src="/images/U统计量结果.png" alt="U统计量结果">
+            </div>
+            <div>
+                <h3>IA 统计结果</h3>
+                <img src="/images/IA统计结果.png" alt="IA统计结果">
+            </div>
+        </section>
+    </section>
+</main>
+<script th:src="@{/js/main.js}"></script>
+</body>
+</html>
+

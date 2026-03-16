@@ -1,0 +1,35 @@
+package com.example.mutation.controller;
+
+import com.example.mutation.entity.ModelResult;
+import com.example.mutation.service.ModelService;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+
+@Controller
+@RequestMapping("/model")
+public class ModelController {
+
+    private final ModelService modelService;
+
+    public ModelController(ModelService modelService) {
+        this.modelService = modelService;
+    }
+
+    @GetMapping("/training")
+    public String trainingPage(Model model) {
+        model.addAttribute("results", modelService.getResults());
+        return "model-training";
+    }
+
+    @PostMapping("/train")
+    public String train(@RequestParam("modelName") String modelName) {
+        modelService.clear();
+        modelService.addResult(new ModelResult(modelName + " 模型", 0.015, 0.21, 0.89));
+        return "redirect:/model/training";
+    }
+}
+

@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>实验选择 - 变异测试系统</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+<header class="nav">
+    <div class="nav-title">变异测试实验平台</div>
+    <nav class="nav-links">
+        <a th:href="@{/home}">主界面</a>
+        <a th:href="@{/algorithm}">算法简介</a>
+        <a th:href="@{/experiment}" class="active">实验演示</a>
+    </nav>
+</header>
+<main class="layout-center">
+    <section class="card">
+        <h1 class="page-title">实验选择</h1>
+        <form th:action="@{/experiment/start}" method="post" class="form-vertical">
+            <div class="form-group">
+                <label for="system">测试系统</label>
+                <select id="system" name="system" required>
+                    <option value="P1">P1</option>
+                    <option value="P2">P2</option>
+                    <option value="P3">P3</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="project">测试项目</label>
+                <select id="project" name="project" required>
+                    <option value="TRANS">TRANS</option>
+                    <option value="SORT">SORT</option>
+                    <option value="SEARCH">SEARCH</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="language">编程语言</label>
+                <select id="language" name="language" required>
+                    <option value="Java">Java</option>
+                    <option value="Python">Python</option>
+                    <option value="C">C</option>
+                </select>
+            </div>
+            <div class="form-group form-actions">
+                <button type="submit" class="btn-primary">开始测试</button>
+            </div>
+        </form>
+    </section>
+</main>
+<script th:src="@{/js/main.js}"></script>
+</body>
+</html>
+

@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>测试数据生成 - 变异测试系统</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+<header class="nav">
+    <div class="nav-title">变异测试实验平台</div>
+    <nav class="nav-links">
+        <a th:href="@{/home}">主界面</a>
+        <a th:href="@{/algorithm}">算法简介</a>
+        <a th:href="@{/experiment}" class="active">实验演示</a>
+    </nav>
+</header>
+<main class="layout-center">
+    <section class="card">
+        <h1 class="page-title">生成测试数据</h1>
+        <p class="page-subtitle">基于训练好的模型自动生成高效覆盖变异分支的测试数据。</p>
+        <form class="form-vertical">
+            <div class="form-group form-actions">
+                <button type="button" class="btn-primary" onclick="showGenerationMessage()">生成测试数据</button>
+            </div>
+        </form>
+        <p id="generationMessage" class="muted" style="display:none;">测试数据生成完成，效率统计如图所示。</p>
+        <div class="image-container">
+            <img src="/images/测试数据生成效率.png" alt="测试数据生成效率">
+        </div>
+    </section>
+</main>
+<script th:src="@{/js/main.js}"></script>
+</body>
+</html>
+

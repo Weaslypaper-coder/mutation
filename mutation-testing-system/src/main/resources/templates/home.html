@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>主界面 - 变异测试系统</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+<header class="nav">
+    <div class="nav-title">变异测试实验平台</div>
+    <nav class="nav-links">
+        <a th:href="@{/home}">主界面</a>
+        <a th:href="@{/algorithm}">算法简介</a>
+        <a th:href="@{/experiment}">实验演示</a>
+    </nav>
+</header>
+<main class="layout-center">
+    <section class="card">
+        <h1 class="page-title">欢迎来到主界面</h1>
+        <p class="page-subtitle">基于变异分支相关度的测试数据生成与模型分析平台</p>
+        <div class="home-actions">
+            <a th:href="@{/algorithm}" class="btn-secondary">算法简介</a>
+            <a th:href="@{/experiment}" class="btn-primary">实验演示</a>
+        </div>
+        <div class="image-container">
+            <img src="/images/算法简介界面.png" alt="系统示意图">
+        </div>
+    </section>
+</main>
+<script th:src="@{/js/main.js}"></script>
+</body>
+</html>
+

@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>登录 - 变异测试系统</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body class="page-login" style="background-image: url('/images/登录界面.png');">
+<div class="overlay"></div>
+<div class="layout-center">
+    <header class="nav">
+        <div class="nav-title">变异测试实验平台</div>
+    </header>
+    <main class="card">
+        <h1 class="page-title">用户登录</h1>
+        <form method="post" th:action="@{/login}" class="form-vertical">
+            <div class="form-group">
+                <label for="username">用户名</label>
+                <input id="username" name="username" type="text" placeholder="admin" required>
+            </div>
+            <div class="form-group">
+                <label for="password">密码</label>
+                <input id="password" name="password" type="password" placeholder="123456" required>
+            </div>
+            <div class="form-group form-actions">
+                <button type="submit" class="btn-primary">登录</button>
+            </div>
+            <div class="form-error" th:if="${error}" th:text="${error}"></div>
+        </form>
+    </main>
+</div>
+<script th:src="@{/js/main.js}"></script>
+</body>
+</html>
+

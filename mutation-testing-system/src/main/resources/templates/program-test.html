@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>程序测试 - 变异测试系统</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+<header class="nav">
+    <div class="nav-title">变异测试实验平台</div>
+    <nav class="nav-links">
+        <a th:href="@{/home}">主界面</a>
+        <a th:href="@{/algorithm}">算法简介</a>
+        <a th:href="@{/experiment}" class="active">实验演示</a>
+    </nav>
+</header>
+<main class="layout-split">
+    <aside class="sidebar">
+        <h2>实验流程</h2>
+        <ul>
+            <li>
+                <form th:action="@{/experiment/import-program}" method="post" class="inline-form">
+                    <input type="hidden" name="programName" value="TRANS.java">
+                    <button type="submit" class="link-button">导入程序</button>
+                </form>
+            </li>
+            <li>
+                <form th:action="@{/experiment/generate-mutants}" method="post" class="inline-form">
+                    <button type="submit" class="link-button">生成变异分支</button>
+                </form>
+            </li>
+            <li><a th:href="@{/parameter/setting}">实验参数设置</a></li>
+            <li><a th:href="@{/experiment/correlation-heatmap}">计算相关度</a></li>
+            <li><a th:href="@{/experiment/correlation-graph}">构建相关图</a></li>
+            <li><a th:href="@{/model/training}">训练预测模型</a></li>
+            <li><a th:href="@{/experiment/data-generation}">生成测试数据</a></li>
+        </ul>
+    </aside>
+    <section class="content card">
+        <h1 class="page-title">程序测试</h1>
+        <div class="section-block">
+            <h2>当前被测程序</h2>
+            <p th:if="${program != null}">
+                名称：<span th:text="${program.programName}"></span>，
+                语言：<span th:text="${program.language}"></span>
+            </p>
+            <p th:if="${program == null}" class="muted">尚未导入程序，请在左侧导航中点击“导入程序”。</p>
+            <div class="image-container small">
+                <img src="/images/被测程序导入成功.png" alt="程序导入示意图">
+            </div>
+        </div>
+
+        <div class="section-block">
+            <h2>变异分支统计</h2>
+            <p>当前变异分支数量：<span th:text="${mutantCount}">0</span></p>
+            <table class="table" th:if="${mutants != null and #lists.size(mutants) > 0}">
+                <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>分支名称</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="m : ${mutants}">
+                    <td th:text="${m.id}"></td>
+                    <td th:text="${m.branchName}"></td>
+                </tr>
+                </tbody>
+            </table>
+            <p th:if="${mutants == null or #lists.size(mutants) == 0}" class="muted">
+                尚未生成变异分支，请点击“生成变异分支”。
+            </p>
+        </div>
+    </section>
+</main>
+<script th:src="@{/js/main.js}"></script>
+</body>
+</html>
+

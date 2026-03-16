@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>相关图构建 - 变异测试系统</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+<header class="nav">
+    <div class="nav-title">变异测试实验平台</div>
+    <nav class="nav-links">
+        <a th:href="@{/home}">主界面</a>
+        <a th:href="@{/algorithm}">算法简介</a>
+        <a th:href="@{/experiment}" class="active">实验演示</a>
+    </nav>
+</header>
+<main class="layout-center">
+    <section class="card">
+        <h1 class="page-title">构建变异分支相关图</h1>
+        <p class="page-subtitle">基于相关度矩阵构建图结构，展示变异分支之间的连接模式。</p>
+        <div class="image-container">
+            <img src="/images/构建变异分支相关图.png" alt="构建变异分支相关图">
+        </div>
+    </section>
+</main>
+<script th:src="@{/js/main.js}"></script>
+</body>
+</html>
+

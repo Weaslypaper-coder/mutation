@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>算法简介 - 变异测试系统</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body class="page-algorithm" style="background-image: url('/images/算法简介界面.png');">
+<div class="overlay"></div>
+<header class="nav">
+    <div class="nav-title">变异测试实验平台</div>
+    <nav class="nav-links">
+        <a th:href="@{/home}">主界面</a>
+        <a th:href="@{/algorithm}" class="active">算法简介</a>
+        <a th:href="@{/experiment}">实验演示</a>
+    </nav>
+</header>
+<main class="layout-center">
+    <section class="card card-transparent">
+        <h1 class="page-title">算法简介</h1>
+        <section class="algo-section">
+            <h2>遗传算法（Genetic Algorithm, GA）</h2>
+            <p>
+                遗传算法是一类模拟自然界生物进化过程的全局优化算法，通过“选择-交叉-变异”等算子迭代更新种群，使适应度更高的个体在搜索空间中逐步被保留下来。
+            </p>
+            <ul>
+                <li>个体表示：采用编码方式描述候选解（如二进制、Gray 编码、实数编码等）。</li>
+                <li>适应度评估：根据变异分支的覆盖率或相关度设计适应度函数。</li>
+                <li>遗传算子：通过交叉与变异不断产生新种群，提高搜索多样性。</li>
+            </ul>
+        </section>
+
+        <section class="algo-section">
+            <h2>CNN 算法（卷积神经网络）</h2>
+            <p>
+                卷积神经网络是一类擅长从空间结构数据中自动学习特征的深度学习模型。将变异分支相关度矩阵视为“图像”，可以利用 CNN 捕捉局部模式和高阶特征。
+            </p>
+            <ul>
+                <li>特征输入：以相关度热力图为输入张量。</li>
+                <li>卷积与池化：逐层抽象特征，抑制噪声并强化关键结构。</li>
+                <li>输出层：通过全连接层预测测试数据生成效率或覆盖率指标。</li>
+            </ul>
+        </section>
+    </section>
+</main>
+<script th:src="@{/js/main.js}"></script>
+</body>
+</html>
+
