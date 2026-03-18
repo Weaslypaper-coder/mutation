@@ -24,6 +24,54 @@ body.page-algorithm {
     z-index: 0;
 }
 
+.page-login {
+    color: #0b1220;
+    background-color: #eef3fb;
+}
+
+.page-login .overlay {
+    background: rgba(245, 248, 255, 0.55);
+}
+
+.page-login .nav {
+    background: rgba(255, 255, 255, 0.78);
+    border-bottom: 1px solid rgba(16, 44, 96, 0.18);
+    color: #0b1220;
+}
+
+.page-login .nav-title {
+    color: #0b1220;
+}
+
+.page-login .card {
+    background: rgba(255, 255, 255, 0.92);
+    border: 1px solid rgba(16, 44, 96, 0.18);
+    box-shadow: 0 18px 45px rgba(6, 18, 48, 0.15);
+}
+
+.page-login input[type="text"],
+.page-login input[type="password"],
+.page-login input[type="number"],
+.page-login select {
+    background: #ffffff;
+    border: 1px solid rgba(16, 44, 96, 0.22);
+    color: #0b1220;
+}
+
+.page-login label {
+    color: rgba(11, 18, 32, 0.82);
+}
+
+.page-login .btn-primary {
+    color: #ffffff;
+    background: linear-gradient(135deg, #2f6bff, #1fb6ff);
+}
+
+.page-login .form-error {
+    color: #c0223a;
+    font-size: 15px;
+}
+
 .nav {
     position: relative;
     z-index: 1;
@@ -36,10 +84,15 @@ body.page-algorithm {
     backdrop-filter: blur(12px);
 }
 
+.nav.nav-center {
+    justify-content: center;
+}
+
 .nav-title {
     font-weight: 600;
     letter-spacing: 0.08em;
-    font-size: 18px;
+    font-size: 24px;
+    text-align: center;
 }
 
 .nav-links a {
@@ -89,7 +142,7 @@ body.page-algorithm {
 
 .page-title {
     margin-top: 0;
-    font-size: 24px;
+    font-size: 30px;
     margin-bottom: 8px;
 }
 
@@ -107,7 +160,7 @@ body.page-algorithm {
 label {
     display: block;
     margin-bottom: 6px;
-    font-size: 14px;
+    font-size: 16px;
 }
 
 input[type="text"],
@@ -115,11 +168,12 @@ input[type="password"],
 input[type="number"],
 select {
     width: 100%;
-    padding: 8px 10px;
+    padding: 12px 12px;
     border-radius: 6px;
     border: 1px solid #394567;
     background: #050818;
     color: #f5f5f7;
+    font-size: 16px;
 }
 
 .form-actions {
@@ -129,11 +183,11 @@ select {
 .btn-primary,
 .btn-secondary {
     display: inline-block;
-    padding: 8px 20px;
+    padding: 12px 22px;
     border-radius: 999px;
     border: none;
     cursor: pointer;
-    font-size: 14px;
+    font-size: 16px;
     text-decoration: none;
 }
 
