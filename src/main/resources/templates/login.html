@@ -12,7 +12,7 @@
         <div class="nav-title">变异测试实验平台</div>
     </header>
     <main class="card">
-        <h1 class="page-title">用户登录</h1>
+        <h1 class="page-title page-title-center">用户登录</h1>
         <form method="post" th:action="@{/login}" class="form-vertical">
             <div class="form-group">
                 <label for="username">用户名</label>
@@ -22,7 +22,7 @@
                 <label for="password">密码</label>
                 <input id="password" name="password" type="password" placeholder="123456" required>
             </div>
-            <div class="form-group form-actions">
+            <div class="form-group form-actions form-actions-center">
                 <button type="submit" class="btn-primary">登录</button>
             </div>
             <div class="form-error" th:if="${error}" th:text="${error}"></div>

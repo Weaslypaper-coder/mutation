@@ -9,9 +9,9 @@
 <header class="nav">
     <div class="nav-title">变异测试实验平台</div>
     <nav class="nav-links">
-        <a th:href="@{/home}" th:classappend="${#httpServletRequest.requestURI == '/home'} ? 'active'">主界面</a>
-        <a th:href="@{/algorithm}" th:classappend="${#httpServletRequest.requestURI == '/algorithm'} ? 'active'">算法简介</a>
-        <a th:href="@{/experiment}" th:classappend="${#httpServletRequest.requestURI == '/experiment'} ? 'active'">实验演示</a>
+        <a th:href="@{/home}" th:classappend="${currentPath == '/home'} ? 'active'">首页</a>
+        <a th:href="@{/algorithm}" th:classappend="${currentPath == '/algorithm'} ? 'active'">算法简介</a>
+        <a th:href="@{/experiment}" th:classappend="${currentPath == '/experiment'} ? 'active'">实验演示</a>
     </nav>
     <div class="nav-right">
         <span class="user-pill" th:if="${session.user != null}">
@@ -20,17 +20,101 @@
         <a th:href="@{/logout}" class="btn-secondary" style="padding:8px 14px;">退出</a>
     </div>
 </header>
-<main class="layout-center">
-    <section class="card">
-        <h1 class="page-title">欢迎来到主界面</h1>
-        <p class="page-subtitle">基于变异分支相关度的测试数据生成与模型分析平台</p>
-        <div class="home-actions">
-            <a th:href="@{/algorithm}" class="btn-secondary">算法简介</a>
-            <a th:href="@{/experiment}" class="btn-primary">实验演示</a>
+<div class="breadcrumb">
+    <div class="container">
+        <span class="crumb">首页</span>
+    </div>
+</div>
+<main class="container page-home">
+    <section class="hero card">
+        <div class="hero-left">
+            <div class="hero-kicker">👋 您好，欢迎使用</div>
+            <h1 class="hero-title">
+                <span class="hero-title-line">变异测试实验平台</span>
+                <span class="hero-title-line hero-title-sub">基于变异分支相关度的测试数据生成与模型分析</span>
+            </h1>
+            <p class="page-subtitle">可视化变异测试，一键生成测试数据与评估报告。</p>
+            <div class="home-actions">
+                <a th:href="@{/algorithm}" class="btn-secondary">📘 算法简介</a>
+                <a th:href="@{/experiment}" class="btn-primary">🧪 实验演示</a>
+                <form th:action="@{/experiment/start}" method="post" class="inline-form">
+                    <input type="hidden" name="system" value="P1">
+                    <input type="hidden" name="project" value="TRANS">
+                    <input type="hidden" name="language" value="Java">
+                    <button type="submit" class="btn-primary">⚡ 快速开始（示例项目）</button>
+                </form>
+            </div>
         </div>
-        <div class="image-container">
-            <img src="/images/算法简介界面.png" alt="系统示意图">
+        <div class="hero-right">
+            <div class="hero-illustration">
+                <img src="/images/算法简介界面.png" alt="平台概览">
+            </div>
         </div>
+    </section>
+
+    <section class="feature-grid">
+        <a th:href="@{/algorithm}" class="feature-card card">
+            <div class="feature-icon">📘</div>
+            <div class="feature-body">
+                <h2 class="feature-title">算法简介</h2>
+                <p class="feature-desc">了解遗传算法与 CNN 的核心思路、流程与关键参数含义。</p>
+                <div class="feature-cta">进入算法简介 →</div>
+            </div>
+        </a>
+        <a th:href="@{/experiment}" class="feature-card card">
+            <div class="feature-icon">🧪</div>
+            <div class="feature-body">
+                <h2 class="feature-title">实验演示</h2>
+                <p class="feature-desc">选择示例项目与语言，生成变异分支，完成相关度分析与模型训练。</p>
+                <div class="feature-cta">开始实验演示 →</div>
+            </div>
+        </a>
+    </section>
+
+    <section class="grid-2">
+        <section class="card">
+            <h2>最近实验摘要</h2>
+            <p class="muted">用于激发探索欲：系统会展示当前会话中的实验状态。</p>
+            <div class="stat-grid">
+                <div class="stat-card">
+                    <div class="stat-label">上次实验</div>
+                    <div class="stat-value" th:text="${lastProgramName != null ? lastProgramName : '暂无'}">暂无</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">变异分支数</div>
+                    <div class="stat-value" th:text="${lastMutantCount != null ? lastMutantCount : 0}">0</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">分支覆盖率（示例）</div>
+                    <div class="stat-value" th:text="${lastCoverage != null ? lastCoverage : '—'}">—</div>
+                </div>
+            </div>
+            <div style="margin-top:14px;">
+                <a th:href="@{/experiment/program-test}" class="btn-secondary">继续上次实验</a>
+            </div>
+        </section>
+
+        <section class="card">
+            <h2>🔥 热门实验示例</h2>
+            <p class="muted">点击即可进入实验选择页，快速配置并开始演示。</p>
+            <ul class="list">
+                <li>
+                    <div class="list-title">三角形分类程序</div>
+                    <div class="list-meta">分支覆盖率 100% · 变异得分 92%</div>
+                </li>
+                <li>
+                    <div class="list-title">二分查找算法</div>
+                    <div class="list-meta">变异得分 85% · 相关度结构清晰</div>
+                </li>
+                <li>
+                    <div class="list-title">排序算法（基准输入）</div>
+                    <div class="list-meta">覆盖率提升明显 · 适合快速展示</div>
+                </li>
+            </ul>
+            <div style="margin-top:14px;">
+                <a th:href="@{/experiment}" class="btn-primary">选择项目并开始 →</a>
+            </div>
+        </section>
     </section>
 </main>
 <script th:src="@{/js/main.js}"></script>

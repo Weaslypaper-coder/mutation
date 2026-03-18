@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 @RequestMapping("/parameter")
@@ -30,7 +31,8 @@ public class ParameterController {
                                 @RequestParam("encodingType") String encodingType,
                                 @RequestParam("crossoverRate") Double crossoverRate,
                                 @RequestParam("mutationRate") Double mutationRate,
-                                @RequestParam("sampleSize") Integer sampleSize) {
+                                @RequestParam("sampleSize") Integer sampleSize,
+                                RedirectAttributes redirectAttributes) {
         ExperimentParameter parameter = new ExperimentParameter(
                 populationSize,
                 encodingType,
@@ -39,6 +41,8 @@ public class ParameterController {
                 sampleSize
         );
         parameterService.saveParameter(parameter);
+        redirectAttributes.addAttribute("msg", "参数已保存：种群=" + populationSize + "，编码=" + encodingType
+                + "，交叉=" + crossoverRate + "，变异=" + mutationRate + "，样本=" + sampleSize);
         return "redirect:/experiment/program-test";
     }
 }

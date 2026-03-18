@@ -10,9 +10,9 @@
 <header class="nav">
     <div class="nav-title">变异测试实验平台</div>
     <nav class="nav-links">
-        <a th:href="@{/home}" th:classappend="${#httpServletRequest.requestURI == '/home'} ? 'active'">主界面</a>
-        <a th:href="@{/algorithm}" th:classappend="${#httpServletRequest.requestURI == '/algorithm'} ? 'active'">算法简介</a>
-        <a th:href="@{/experiment}" th:classappend="${#httpServletRequest.requestURI == '/experiment'} ? 'active'">实验演示</a>
+        <a th:href="@{/home}" th:classappend="${currentPath == '/home'} ? 'active'">首页</a>
+        <a th:href="@{/algorithm}" th:classappend="${currentPath == '/algorithm'} ? 'active'">算法简介</a>
+        <a th:href="@{/experiment}" th:classappend="${currentPath == '/experiment'} ? 'active'">实验演示</a>
     </nav>
     <div class="nav-right">
         <span class="user-pill" th:if="${session.user != null}">
@@ -24,16 +24,31 @@
 <main class="layout-center">
     <section class="card card-transparent">
         <h1 class="page-title">算法简介</h1>
+        <p class="page-subtitle">本页以“理解 → 试验”的方式组织内容：先掌握原理与关键参数，再一键进入实验演示。</p>
+        <div class="home-actions" style="margin-top:10px;">
+            <a th:href="@{/experiment}" class="btn-primary">🧪 尝试实验（从理论到实践）</a>
+            <a th:href="@{/home}" class="btn-secondary">返回首页</a>
+        </div>
         <section class="algo-section">
             <h2>遗传算法（Genetic Algorithm, GA）</h2>
             <p>
                 遗传算法是一类模拟自然界生物进化过程的全局优化算法，通过“选择-交叉-变异”等算子迭代更新种群，使适应度更高的个体在搜索空间中逐步被保留下来。
             </p>
+            <h3>典型流程（伪代码）</h3>
+            <pre class="code-block"><code>Initialize population P
+Evaluate fitness(P)
+repeat until termination:
+  Select parents from P
+  Crossover(parents) -> offspring
+  Mutate(offspring)
+  Evaluate fitness(offspring)
+  P = SurvivorSelection(P, offspring)</code></pre>
             <ul>
                 <li>个体表示：采用编码方式描述候选解（如二进制、Gray 编码、实数编码等）。</li>
                 <li>适应度评估：根据变异分支的覆盖率或相关度设计适应度函数。</li>
                 <li>遗传算子：通过交叉与变异不断产生新种群，提高搜索多样性。</li>
             </ul>
+            <p class="muted">参数建议：交叉概率通常取 0.6~0.9，变异概率取 0.01~0.2；种群规模越大越稳定但耗时更长。</p>
         </section>
 
         <section class="algo-section">
@@ -41,10 +56,20 @@
             <p>
                 卷积神经网络是一类擅长从空间结构数据中自动学习特征的深度学习模型。将变异分支相关度矩阵视为“图像”，可以利用 CNN 捕捉局部模式和高阶特征。
             </p>
+            <h3>为什么适合本系统</h3>
+            <ul>
+                <li>相关度矩阵具有空间结构：局部模式（团簇/条带）可反映分支间的强弱关系。</li>
+                <li>CNN 能自动提取局部与组合特征，用于预测测试数据生成效率或覆盖率等指标。</li>
+            </ul>
             <ul>
                 <li>特征输入：以相关度热力图为输入张量。</li>
                 <li>卷积与池化：逐层抽象特征，抑制噪声并强化关键结构。</li>
                 <li>输出层：通过全连接层预测测试数据生成效率或覆盖率指标。</li>
+            </ul>
+            <h3>相关资料（建议阅读）</h3>
+            <ul>
+                <li><a href="https://arxiv.org/abs/1409.1556" target="_blank" rel="noreferrer">Very Deep Convolutional Networks for Large-Scale Image Recognition (VGG)</a></li>
+                <li><a href="https://ieeexplore.ieee.org/document/726791" target="_blank" rel="noreferrer">Genetic Algorithms in Search, Optimization and Machine Learning</a></li>
             </ul>
         </section>
     </section>

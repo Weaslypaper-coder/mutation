@@ -9,9 +9,9 @@
 <header class="nav">
     <div class="nav-title">变异测试实验平台</div>
     <nav class="nav-links">
-        <a th:href="@{/home}" th:classappend="${#httpServletRequest.requestURI == '/home'} ? 'active'">主界面</a>
-        <a th:href="@{/algorithm}" th:classappend="${#httpServletRequest.requestURI == '/algorithm'} ? 'active'">算法简介</a>
-        <a th:href="@{/experiment}" th:classappend="${#httpServletRequest.requestURI.startsWith('/experiment') or #httpServletRequest.requestURI.startsWith('/model')} ? 'active'">实验演示</a>
+        <a th:href="@{/home}" th:classappend="${currentPath == '/home'} ? 'active'">首页</a>
+        <a th:href="@{/algorithm}" th:classappend="${currentPath == '/algorithm'} ? 'active'">算法简介</a>
+        <a th:href="@{/experiment}" th:classappend="${currentPath.startsWith('/experiment') or currentPath.startsWith('/model')} ? 'active'">实验演示</a>
     </nav>
     <div class="nav-right">
         <span class="user-pill" th:if="${session.user != null}">
@@ -23,6 +23,36 @@
 <main class="layout-center">
     <section class="card">
         <h1 class="page-title">模型训练</h1>
+        <div class="notice notice-success" th:if="${param.msg != null}">
+            <div>
+                <div class="notice-title">操作成功</div>
+                <div class="notice-text" th:text="${param.msg[0]}">已完成操作。</div>
+            </div>
+            <div class="notice-actions">
+                <a th:href="@{/experiment/data-generation}" class="btn-secondary" style="padding:8px 14px;">下一步：生成测试数据</a>
+            </div>
+        </div>
+
+        <div class="notice notice-warn" th:if="${!expHasProgram or !expHasMutants}">
+            <div>
+                <div class="notice-title">前置条件未完成</div>
+                <div class="notice-text" th:if="${!expHasProgram}">请先导入程序（步骤 1）。</div>
+                <div class="notice-text" th:if="${expHasProgram and !expHasMutants}">请先生成变异分支（步骤 2）。</div>
+            </div>
+            <div class="notice-actions">
+                <a th:href="@{/experiment/program-test}" class="btn-primary" style="padding:8px 14px;">返回工作台补全步骤</a>
+            </div>
+        </div>
+
+        <div class="stepper">
+            <div class="step" th:classappend="${expHasProgram} ? ' step-done' : ''"><div class="step-top"><div class="step-num">1</div><div class="step-title">导入程序</div></div><div class="step-meta" th:text="${expHasProgram ? ('已导入：' + expProgramName) : '未导入'}">未导入</div></div>
+            <div class="step" th:classappend="${expHasMutants} ? ' step-done' : ''"><div class="step-top"><div class="step-num">2</div><div class="step-title">生成变异分支</div></div><div class="step-meta" th:text="${expHasMutants ? ('已生成：' + expMutantCount) : '未生成'}">未生成</div></div>
+            <div class="step" th:classappend="${expHasParameter} ? ' step-done' : ''"><div class="step-top"><div class="step-num">3</div><div class="step-title">参数设置</div></div><div class="step-meta" th:text="${expHasParameter ? '已保存参数' : '未保存'}">未保存</div></div>
+            <div class="step"><div class="step-top"><div class="step-num">4</div><div class="step-title">相关度热力图</div></div><div class="step-meta">查看相关度矩阵</div></div>
+            <div class="step"><div class="step-top"><div class="step-num">5</div><div class="step-title">相关图</div></div><div class="step-meta">构建图结构</div></div>
+            <div class="step step-active" th:classappend="${expHasModelResult} ? ' step-done' : ''"><div class="step-top"><div class="step-num">6</div><div class="step-title">模型训练</div></div><div class="step-meta" th:text="${expHasModelResult ? '已有训练结果' : '当前步骤'}">当前步骤</div></div>
+            <div class="step"><div class="step-top"><div class="step-num">7</div><div class="step-title">生成测试数据</div></div><div class="step-meta">生成效率统计</div></div>
+        </div>
         <form th:action="@{/model/train}" method="post" class="form-inline">
             <label for="modelName">模型选择：</label>
             <select id="modelName" name="modelName">

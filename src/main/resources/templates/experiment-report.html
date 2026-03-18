@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>实验报告 - 变异测试系统</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+<header class="nav">
+    <div class="nav-title">变异测试实验平台</div>
+    <nav class="nav-links">
+        <a th:href="@{/home}" th:classappend="${currentPath == '/home'} ? 'active'">首页</a>
+        <a th:href="@{/algorithm}" th:classappend="${currentPath == '/algorithm'} ? 'active'">算法简介</a>
+        <a th:href="@{/experiment}" th:classappend="${currentPath.startsWith('/experiment')} ? 'active'">实验演示</a>
+    </nav>
+    <div class="nav-right">
+        <span class="user-pill" th:if="${session.user != null}">
+            当前用户：<strong th:text="${session.user}">admin</strong>
+        </span>
+        <a th:href="@{/logout}" class="btn-secondary" style="padding:8px 14px;">退出</a>
+    </div>
+</header>
+
+<div class="breadcrumb">
+    <div class="container">
+        <span class="crumb">实验演示 / 实验报告</span>
+    </div>
+</div>
+
+<main class="container page-home">
+    <section class="card">
+        <h1 class="page-title">实验报告（数据总览）</h1>
+        <p class="page-subtitle">建议在完成全部步骤后查看本页：它会汇总当前会话的实验配置、变异分支、训练结果与关键图表。</p>
+
+        <div class="notice notice-warn" th:if="${!expAllDone}">
+            <div>
+                <div class="notice-title">实验尚未全部完成</div>
+                <div class="notice-text">你仍可预览报告结构，但建议先完成：导入程序 → 生成分支 → 参数设置 → 模型训练。</div>
+            </div>
+            <div class="notice-actions">
+                <a th:href="@{/experiment/program-test}" class="btn-primary" style="padding:8px 14px;">返回实验工作台</a>
+            </div>
+        </div>
+
+        <div class="stat-grid">
+            <div class="stat-card">
+                <div class="stat-label">被测程序</div>
+                <div class="stat-value" th:text="${program != null ? program.programName : '暂无'}">暂无</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">变异分支数</div>
+                <div class="stat-value" th:text="${mutantCount}">0</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">训练状态</div>
+                <div class="stat-value" th:text="${expHasModelResult ? '已完成' : '未训练'}">未训练</div>
+            </div>
+        </div>
+
+        <div class="grid-2" style="margin-top:18px;">
+            <section class="card" style="box-shadow:none; background:rgba(255,255,255,0.68);">
+                <h2>实验参数</h2>
+                <p class="muted" th:if="${parameter == null}">暂无参数，请先在步骤 3 进行设置。</p>
+                <table class="table" th:if="${parameter != null}">
+                    <tbody>
+                    <tr><th>初始种群数量</th><td th:text="${parameter.populationSize}"></td></tr>
+                    <tr><th>编码方式</th><td th:text="${parameter.encodingType}"></td></tr>
+                    <tr><th>交叉概率</th><td th:text="${parameter.crossoverRate}"></td></tr>
+                    <tr><th>变异概率</th><td th:text="${parameter.mutationRate}"></td></tr>
+                    <tr><th>样本数量</th><td th:text="${parameter.sampleSize}"></td></tr>
+                    </tbody>
+                </table>
+            </section>
+
+            <section class="card" style="box-shadow:none; background:rgba(255,255,255,0.68);">
+                <h2>模型训练结果</h2>
+                <p class="muted" th:if="${results == null or #lists.isEmpty(results)}">暂无训练结果，请先在步骤 6 开始训练。</p>
+                <table class="table" th:if="${results != null and !#lists.isEmpty(results)}">
+                    <thead>
+                    <tr>
+                        <th>模型名称</th>
+                        <th>MSE</th>
+                        <th>U 统计量</th>
+                        <th>IA 统计量</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="r : ${results}">
+                        <td th:text="${r.modelName}"></td>
+                        <td th:text="${r.mseValue}"></td>
+                        <td th:text="${r.uStatistic}"></td>
+                        <td th:text="${r.iaStatistic}"></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </section>
+        </div>
+
+        <section class="section-block">
+            <h2>关键图表</h2>
+            <div class="image-grid">
+                <div>
+                    <h3>相关度热力图</h3>
+                    <img src="/images/计算变异分支相关度.png" alt="计算变异分支相关度">
+                </div>
+                <div>
+                    <h3>相关图结构</h3>
+                    <img src="/images/构建变异分支相关图.png" alt="构建变异分支相关图">
+                </div>
+                <div>
+                    <h3>测试数据生成效率</h3>
+                    <img src="/images/测试数据生成效率.png" alt="测试数据生成效率">
+                </div>
+            </div>
+        </section>
+
+        <div class="home-actions" style="margin-top:18px;">
+            <a th:href="@{/experiment/program-test}" class="btn-secondary">返回工作台</a>
+            <a th:href="@{/experiment}" class="btn-secondary">重新配置实验</a>
+        </div>
+    </section>
+</main>
+<script th:src="@{/js/main.js}"></script>
+</body>
+</html>
+

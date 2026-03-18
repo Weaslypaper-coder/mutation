@@ -9,9 +9,9 @@
 <header class="nav">
     <div class="nav-title">变异测试实验平台</div>
     <nav class="nav-links">
-        <a th:href="@{/home}" th:classappend="${#httpServletRequest.requestURI == '/home'} ? 'active'">主界面</a>
-        <a th:href="@{/algorithm}" th:classappend="${#httpServletRequest.requestURI == '/algorithm'} ? 'active'">算法简介</a>
-        <a th:href="@{/experiment}" th:classappend="${#httpServletRequest.requestURI.startsWith('/experiment')} ? 'active'">实验演示</a>
+        <a th:href="@{/home}" th:classappend="${currentPath == '/home'} ? 'active'">首页</a>
+        <a th:href="@{/algorithm}" th:classappend="${currentPath == '/algorithm'} ? 'active'">算法简介</a>
+        <a th:href="@{/experiment}" th:classappend="${currentPath.startsWith('/experiment')} ? 'active'">实验演示</a>
     </nav>
     <div class="nav-right">
         <span class="user-pill" th:if="${session.user != null}">
@@ -35,15 +35,106 @@
                     <button type="submit" class="link-button">② 生成变异分支</button>
                 </form>
             </li>
-            <li><a th:href="@{/parameter/setting}" th:classappend="${#httpServletRequest.requestURI.startsWith('/parameter/setting')} ? 'active'">③ 实验参数设置</a></li>
-            <li><a th:href="@{/experiment/correlation-heatmap}" th:classappend="${#httpServletRequest.requestURI.startsWith('/experiment/correlation-heatmap')} ? 'active'">④ 计算相关度</a></li>
-            <li><a th:href="@{/experiment/correlation-graph}" th:classappend="${#httpServletRequest.requestURI.startsWith('/experiment/correlation-graph')} ? 'active'">⑤ 构建相关图</a></li>
-            <li><a th:href="@{/model/training}" th:classappend="${#httpServletRequest.requestURI.startsWith('/model/training')} ? 'active'">⑥ 训练预测模型</a></li>
-            <li><a th:href="@{/experiment/data-generation}" th:classappend="${#httpServletRequest.requestURI.startsWith('/experiment/data-generation')} ? 'active'">⑦ 生成测试数据</a></li>
+            <li><a th:href="@{/parameter/setting}" th:classappend="${currentPath.startsWith('/parameter/setting')} ? 'active'">③ 实验参数设置</a></li>
+            <li><a th:href="@{/experiment/correlation-heatmap}" th:classappend="${currentPath.startsWith('/experiment/correlation-heatmap')} ? 'active'">④ 计算相关度</a></li>
+            <li><a th:href="@{/experiment/correlation-graph}" th:classappend="${currentPath.startsWith('/experiment/correlation-graph')} ? 'active'">⑤ 构建相关图</a></li>
+            <li><a th:href="@{/model/training}" th:classappend="${currentPath.startsWith('/model/training')} ? 'active'">⑥ 训练预测模型</a></li>
+            <li><a th:href="@{/experiment/data-generation}" th:classappend="${currentPath.startsWith('/experiment/data-generation')} ? 'active'">⑦ 生成测试数据</a></li>
         </ul>
     </aside>
     <section class="content card">
         <h1 class="page-title">程序测试</h1>
+        <div class="notice notice-success" th:if="${param.msg != null}">
+            <div>
+                <div class="notice-title">操作成功</div>
+                <div class="notice-text" th:text="${param.msg[0]}">已完成操作。</div>
+            </div>
+            <div class="notice-actions">
+                <a th:href="@{/parameter/setting}" class="btn-secondary" style="padding:8px 14px;">下一步：设置参数</a>
+            </div>
+        </div>
+
+        <div class="notice notice-success" th:if="${expAllDone}">
+            <div>
+                <div class="notice-title">实验流程已完成</div>
+                <div class="notice-text">你可以进入“实验报告”查看数据汇总，或重新配置开始下一轮实验。</div>
+            </div>
+            <div class="notice-actions">
+                <a th:href="@{/experiment/report}" class="btn-primary" style="padding:8px 14px;">查看实验报告</a>
+                <a th:href="@{/experiment}" class="btn-secondary" style="padding:8px 14px;">重新配置</a>
+            </div>
+        </div>
+
+        <div class="notice notice-warn" th:if="${!expHasProgram}">
+            <div>
+                <div class="notice-title">提示：先导入被测程序</div>
+                <div class="notice-text">请点击左侧“① 导入程序”，系统会导入示例程序并初始化当前实验。</div>
+            </div>
+        </div>
+
+        <div class="notice notice-warn" th:if="${expHasProgram and !expHasMutants}">
+            <div>
+                <div class="notice-title">提示：还未生成变异分支</div>
+                <div class="notice-text">建议先生成 20 个变异分支，再进行相关度分析与模型训练。</div>
+            </div>
+            <div class="notice-actions">
+                <form th:action="@{/experiment/generate-mutants}" method="post" class="inline-form">
+                    <button type="submit" class="btn-primary" style="padding:8px 14px;">立即生成</button>
+                </form>
+            </div>
+        </div>
+
+        <div class="stepper">
+            <div class="step" th:classappend="${expHasProgram} ? ' step-done' : ' step-active'">
+                <div class="step-top">
+                    <div class="step-num">1</div>
+                    <div class="step-title">导入程序</div>
+                </div>
+                <div class="step-meta" th:text="${expHasProgram ? ('已导入：' + expProgramName) : '未导入（点击左侧①）'}">未导入</div>
+            </div>
+            <div class="step" th:classappend="${expHasMutants} ? ' step-done' : ''">
+                <div class="step-top">
+                    <div class="step-num">2</div>
+                    <div class="step-title">生成变异分支</div>
+                </div>
+                <div class="step-meta" th:text="${expHasMutants ? ('已生成：' + expMutantCount) : '未生成（点击左侧②）'}">未生成</div>
+            </div>
+            <div class="step" th:classappend="${expHasParameter} ? ' step-done' : ''">
+                <div class="step-top">
+                    <div class="step-num">3</div>
+                    <div class="step-title">参数设置</div>
+                </div>
+                <div class="step-meta" th:text="${expHasParameter ? '已保存参数' : '未保存（点击左侧③）'}">未保存</div>
+            </div>
+            <div class="step">
+                <div class="step-top">
+                    <div class="step-num">4</div>
+                    <div class="step-title">相关度热力图</div>
+                </div>
+                <div class="step-meta">查看分支相关度矩阵</div>
+            </div>
+            <div class="step">
+                <div class="step-top">
+                    <div class="step-num">5</div>
+                    <div class="step-title">相关图</div>
+                </div>
+                <div class="step-meta">构建图结构并分析</div>
+            </div>
+            <div class="step" th:classappend="${expHasModelResult} ? ' step-done' : ''">
+                <div class="step-top">
+                    <div class="step-num">6</div>
+                    <div class="step-title">模型训练</div>
+                </div>
+                <div class="step-meta" th:text="${expHasModelResult ? '已有训练结果' : '未训练（点击左侧⑥）'}">未训练</div>
+            </div>
+            <div class="step">
+                <div class="step-top">
+                    <div class="step-num">7</div>
+                    <div class="step-title">生成测试数据</div>
+                </div>
+                <div class="step-meta">生成并查看效率图</div>
+            </div>
+        </div>
         <div class="section-block">
             <h2>当前被测程序</h2>
             <p th:if="${program != null}">
