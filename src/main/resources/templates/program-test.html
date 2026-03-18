@@ -9,10 +9,16 @@
 <header class="nav">
     <div class="nav-title">变异测试实验平台</div>
     <nav class="nav-links">
-        <a th:href="@{/home}">主界面</a>
-        <a th:href="@{/algorithm}">算法简介</a>
-        <a th:href="@{/experiment}" class="active">实验演示</a>
+        <a th:href="@{/home}" th:classappend="${#httpServletRequest.requestURI == '/home'} ? 'active'">主界面</a>
+        <a th:href="@{/algorithm}" th:classappend="${#httpServletRequest.requestURI == '/algorithm'} ? 'active'">算法简介</a>
+        <a th:href="@{/experiment}" th:classappend="${#httpServletRequest.requestURI.startsWith('/experiment')} ? 'active'">实验演示</a>
     </nav>
+    <div class="nav-right">
+        <span class="user-pill" th:if="${session.user != null}">
+            当前用户：<strong th:text="${session.user}">admin</strong>
+        </span>
+        <a th:href="@{/logout}" class="btn-secondary" style="padding:8px 14px;">退出</a>
+    </div>
 </header>
 <main class="layout-split">
     <aside class="sidebar">
@@ -21,19 +27,19 @@
             <li>
                 <form th:action="@{/experiment/import-program}" method="post" class="inline-form">
                     <input type="hidden" name="programName" value="TRANS.java">
-                    <button type="submit" class="link-button">导入程序</button>
+                    <button type="submit" class="link-button">① 导入程序</button>
                 </form>
             </li>
             <li>
                 <form th:action="@{/experiment/generate-mutants}" method="post" class="inline-form">
-                    <button type="submit" class="link-button">生成变异分支</button>
+                    <button type="submit" class="link-button">② 生成变异分支</button>
                 </form>
             </li>
-            <li><a th:href="@{/parameter/setting}">实验参数设置</a></li>
-            <li><a th:href="@{/experiment/correlation-heatmap}">计算相关度</a></li>
-            <li><a th:href="@{/experiment/correlation-graph}">构建相关图</a></li>
-            <li><a th:href="@{/model/training}">训练预测模型</a></li>
-            <li><a th:href="@{/experiment/data-generation}">生成测试数据</a></li>
+            <li><a th:href="@{/parameter/setting}" th:classappend="${#httpServletRequest.requestURI.startsWith('/parameter/setting')} ? 'active'">③ 实验参数设置</a></li>
+            <li><a th:href="@{/experiment/correlation-heatmap}" th:classappend="${#httpServletRequest.requestURI.startsWith('/experiment/correlation-heatmap')} ? 'active'">④ 计算相关度</a></li>
+            <li><a th:href="@{/experiment/correlation-graph}" th:classappend="${#httpServletRequest.requestURI.startsWith('/experiment/correlation-graph')} ? 'active'">⑤ 构建相关图</a></li>
+            <li><a th:href="@{/model/training}" th:classappend="${#httpServletRequest.requestURI.startsWith('/model/training')} ? 'active'">⑥ 训练预测模型</a></li>
+            <li><a th:href="@{/experiment/data-generation}" th:classappend="${#httpServletRequest.requestURI.startsWith('/experiment/data-generation')} ? 'active'">⑦ 生成测试数据</a></li>
         </ul>
     </aside>
     <section class="content card">

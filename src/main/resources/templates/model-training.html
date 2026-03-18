@@ -9,10 +9,16 @@
 <header class="nav">
     <div class="nav-title">变异测试实验平台</div>
     <nav class="nav-links">
-        <a th:href="@{/home}">主界面</a>
-        <a th:href="@{/algorithm}">算法简介</a>
-        <a th:href="@{/experiment}" class="active">实验演示</a>
+        <a th:href="@{/home}" th:classappend="${#httpServletRequest.requestURI == '/home'} ? 'active'">主界面</a>
+        <a th:href="@{/algorithm}" th:classappend="${#httpServletRequest.requestURI == '/algorithm'} ? 'active'">算法简介</a>
+        <a th:href="@{/experiment}" th:classappend="${#httpServletRequest.requestURI.startsWith('/experiment') or #httpServletRequest.requestURI.startsWith('/model')} ? 'active'">实验演示</a>
     </nav>
+    <div class="nav-right">
+        <span class="user-pill" th:if="${session.user != null}">
+            当前用户：<strong th:text="${session.user}">admin</strong>
+        </span>
+        <a th:href="@{/logout}" class="btn-secondary" style="padding:8px 14px;">退出</a>
+    </div>
 </header>
 <main class="layout-center">
     <section class="card">
