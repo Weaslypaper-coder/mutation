@@ -56,10 +56,9 @@
                 <div class="step-top"><div class="step-num">3</div><div class="step-title">参数设置</div></div>
                 <div class="step-meta" th:text="${expHasParameter ? '已保存参数' : '正在配置'}">正在配置</div>
             </div>
-            <div class="step"><div class="step-top"><div class="step-num">4</div><div class="step-title">相关度热力图</div></div><div class="step-meta">查看相关度矩阵</div></div>
-            <div class="step"><div class="step-top"><div class="step-num">5</div><div class="step-title">相关图</div></div><div class="step-meta">构建图结构</div></div>
-            <div class="step" th:classappend="${expHasModelResult} ? ' step-done' : ''"><div class="step-top"><div class="step-num">6</div><div class="step-title">模型训练</div></div><div class="step-meta" th:text="${expHasModelResult ? '已有训练结果' : '未训练'}">未训练</div></div>
-            <div class="step"><div class="step-top"><div class="step-num">7</div><div class="step-title">生成测试数据</div></div><div class="step-meta">生成效率统计</div></div>
+            <div class="step" th:classappend="${expHasPaths} ? ' step-done' : ''"><div class="step-top"><div class="step-num">4</div><div class="step-title">生成路径</div></div><div class="step-meta" th:text="${expHasPaths ? ('已生成：' + expPathCount) : '未生成'}">未生成</div></div>
+            <div class="step" th:classappend="${expHasModelResult} ? ' step-done' : ''"><div class="step-top"><div class="step-num">5</div><div class="step-title">模型训练</div></div><div class="step-meta" th:text="${expHasModelResult ? '已有训练结果' : '未训练'}">未训练</div></div>
+            <div class="step"><div class="step-top"><div class="step-num">6</div><div class="step-title">生成测试数据</div></div><div class="step-meta">生成效率统计</div></div>
         </div>
 
         <form th:action="@{/parameter/save}" method="post" class="form-vertical">

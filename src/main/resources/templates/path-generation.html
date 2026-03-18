@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>生成路径（相关度与相关图） - 变异测试系统</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+<header class="nav">
+    <div class="nav-title">变异测试实验平台</div>
+    <nav class="nav-links">
+        <a th:href="@{/home}" th:classappend="${currentPath == '/home'} ? 'active'">首页</a>
+        <a th:href="@{/algorithm}" th:classappend="${currentPath == '/algorithm'} ? 'active'">算法简介</a>
+        <a th:href="@{/experiment}" th:classappend="${currentPath.startsWith('/experiment')} ? 'active'">实验演示</a>
+    </nav>
+    <div class="nav-right">
+        <span class="user-pill" th:if="${session.user != null}">
+            当前用户：<strong th:text="${session.user}">admin</strong>
+        </span>
+        <a th:href="@{/logout}" class="btn-secondary" style="padding:8px 14px;">退出</a>
+    </div>
+</header>
+
+<main class="layout-center">
+    <section class="card">
+        <h1 class="page-title">生成路径（相关度 + 相关图）</h1>
+        <p class="page-subtitle">
+            本步骤用于路径覆盖测试：先计算变异分支相关度并构建相关图，再在此基础上生成 20 条“路径”（演示版）。
+        </p>
+
+        <div class="notice notice-success" th:if="${param.msg != null}">
+            <div>
+                <div class="notice-title">操作成功</div>
+                <div class="notice-text" th:text="${param.msg[0]}">已完成操作。</div>
+            </div>
+            <div class="notice-actions">
+                <a th:href="@{/model/training}" class="btn-secondary" style="padding:8px 14px;">下一步：训练模型</a>
+            </div>
+        </div>
+
+        <div class="notice notice-warn" th:if="${!expHasProgram or !expHasMutants}">
+            <div>
+                <div class="notice-title">前置条件未完成</div>
+                <div class="notice-text" th:if="${!expHasProgram}">请先导入程序（步骤 1）。</div>
+                <div class="notice-text" th:if="${expHasProgram and !expHasMutants}">请先生成 20 个变异分支（步骤 2）。</div>
+            </div>
+            <div class="notice-actions">
+                <a th:href="@{/experiment/program-test}" class="btn-primary" style="padding:8px 14px;">返回工作台补全步骤</a>
+            </div>
+        </div>
+
+        <div class="stepper">
+            <div class="step" th:classappend="${expHasProgram} ? ' step-done' : ''"><div class="step-top"><div class="step-num">1</div><div class="step-title">导入程序</div></div><div class="step-meta" th:text="${expHasProgram ? ('已导入：' + expProgramName) : '未导入'}">未导入</div></div>
+            <div class="step" th:classappend="${expHasMutants} ? ' step-done' : ''"><div class="step-top"><div class="step-num">2</div><div class="step-title">生成变异分支</div></div><div class="step-meta" th:text="${expHasMutants ? ('已生成：' + expMutantCount) : '未生成'}">未生成</div></div>
+            <div class="step" th:classappend="${expHasParameter} ? ' step-done' : ''"><div class="step-top"><div class="step-num">3</div><div class="step-title">参数设置</div></div><div class="step-meta" th:text="${expHasParameter ? '已保存参数' : '未保存'}">未保存</div></div>
+            <div class="step step-active" th:classappend="${expHasPaths} ? ' step-done' : ''"><div class="step-top"><div class="step-num">4</div><div class="step-title">生成路径</div></div><div class="step-meta" th:text="${expHasPaths ? ('已生成：' + expPathCount) : '基于相关度与相关图生成路径'}">生成路径</div></div>
+            <div class="step" th:classappend="${expHasModelResult} ? ' step-done' : ''"><div class="step-top"><div class="step-num">5</div><div class="step-title">模型训练</div></div><div class="step-meta" th:text="${expHasModelResult ? '已有训练结果' : '未训练'}">未训练</div></div>
+            <div class="step"><div class="step-top"><div class="step-num">6</div><div class="step-title">生成测试数据</div></div><div class="step-meta">生成效率统计</div></div>
+        </div>
+
+        <div class="home-actions">
+            <form th:action="@{/experiment/generate-paths}" method="post" class="inline-form">
+                <button type="submit" class="btn-primary">生成 20 条路径（基于相关度与相关图）</button>
+            </form>
+            <a th:href="@{/parameter/setting}" class="btn-secondary">返回：参数设置</a>
+            <a th:href="@{/model/training}" class="btn-secondary">继续：训练模型</a>
+        </div>
+
+        <div class="grid-2" style="margin-top:18px;">
+            <section class="card" style="box-shadow:none; background:rgba(255,255,255,0.68);">
+                <h2>相关度热力图</h2>
+                <p class="muted">展示分支之间的相关度矩阵，为路径选择提供依据。</p>
+                <div class="image-container">
+                    <img src="/images/计算变异分支相关度.png" alt="计算变异分支相关度">
+                </div>
+            </section>
+            <section class="card" style="box-shadow:none; background:rgba(255,255,255,0.68);">
+                <h2>相关图构建</h2>
+                <p class="muted">将相关度矩阵转化为图结构，支持更直观的路径覆盖分析。</p>
+                <div class="image-container">
+                    <img src="/images/构建变异分支相关图.png" alt="构建变异分支相关图">
+                </div>
+            </section>
+        </div>
+
+        <section class="section-block">
+            <h2>已生成路径（20 条）</h2>
+            <p class="muted" th:if="${paths == null or #lists.isEmpty(paths)}">尚未生成路径，请点击上方按钮。</p>
+            <table class="table" th:if="${paths != null and !#lists.isEmpty(paths)}">
+                <thead>
+                <tr>
+                    <th>#</th>
+                    <th>路径描述</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="p, stat : ${paths}">
+                    <td th:text="${stat.index + 1}">1</td>
+                    <td th:text="${p}">Path_1</td>
+                </tr>
+                </tbody>
+            </table>
+        </section>
+    </section>
+</main>
+<script th:src="@{/js/main.js}"></script>
+</body>
+</html>
+

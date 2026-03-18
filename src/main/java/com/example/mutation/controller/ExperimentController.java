@@ -72,12 +72,25 @@ public class ExperimentController {
 
     @GetMapping("/correlation-heatmap")
     public String correlationHeatmap() {
-        return "correlation-heatmap";
+        return "redirect:/experiment/path-generation";
     }
 
     @GetMapping("/correlation-graph")
     public String correlationGraph() {
-        return "correlation-graph";
+        return "redirect:/experiment/path-generation";
+    }
+
+    @GetMapping("/path-generation")
+    public String pathGeneration(Model model) {
+        model.addAttribute("paths", experimentService.getGeneratedPaths());
+        return "path-generation";
+    }
+
+    @PostMapping("/generate-paths")
+    public String generatePaths(RedirectAttributes redirectAttributes) {
+        experimentService.generatePaths(20);
+        redirectAttributes.addAttribute("msg", "已基于相关度与相关图生成 20 条路径（示例）");
+        return "redirect:/experiment/path-generation";
     }
 
     @GetMapping("/data-generation")

@@ -36,10 +36,9 @@
                 </form>
             </li>
             <li><a th:href="@{/parameter/setting}" th:classappend="${currentPath.startsWith('/parameter/setting')} ? 'active'">③ 实验参数设置</a></li>
-            <li><a th:href="@{/experiment/correlation-heatmap}" th:classappend="${currentPath.startsWith('/experiment/correlation-heatmap')} ? 'active'">④ 计算相关度</a></li>
-            <li><a th:href="@{/experiment/correlation-graph}" th:classappend="${currentPath.startsWith('/experiment/correlation-graph')} ? 'active'">⑤ 构建相关图</a></li>
-            <li><a th:href="@{/model/training}" th:classappend="${currentPath.startsWith('/model/training')} ? 'active'">⑥ 训练预测模型</a></li>
-            <li><a th:href="@{/experiment/data-generation}" th:classappend="${currentPath.startsWith('/experiment/data-generation')} ? 'active'">⑦ 生成测试数据</a></li>
+            <li><a th:href="@{/experiment/path-generation}" th:classappend="${currentPath.startsWith('/experiment/path-generation')} ? 'active'">④ 生成路径（相关度+相关图）</a></li>
+            <li><a th:href="@{/model/training}" th:classappend="${currentPath.startsWith('/model/training')} ? 'active'">⑤ 训练预测模型</a></li>
+            <li><a th:href="@{/experiment/data-generation}" th:classappend="${currentPath.startsWith('/experiment/data-generation')} ? 'active'">⑥ 生成测试数据</a></li>
         </ul>
     </aside>
     <section class="content card">
@@ -106,30 +105,23 @@
                 </div>
                 <div class="step-meta" th:text="${expHasParameter ? '已保存参数' : '未保存（点击左侧③）'}">未保存</div>
             </div>
-            <div class="step">
+            <div class="step" th:classappend="${expHasPaths} ? ' step-done' : ''">
                 <div class="step-top">
                     <div class="step-num">4</div>
-                    <div class="step-title">相关度热力图</div>
+                    <div class="step-title">生成路径</div>
                 </div>
-                <div class="step-meta">查看分支相关度矩阵</div>
-            </div>
-            <div class="step">
-                <div class="step-top">
-                    <div class="step-num">5</div>
-                    <div class="step-title">相关图</div>
-                </div>
-                <div class="step-meta">构建图结构并分析</div>
+                <div class="step-meta" th:text="${expHasPaths ? ('已生成：' + expPathCount) : '未生成（点击左侧④）'}">未生成</div>
             </div>
             <div class="step" th:classappend="${expHasModelResult} ? ' step-done' : ''">
                 <div class="step-top">
-                    <div class="step-num">6</div>
+                    <div class="step-num">5</div>
                     <div class="step-title">模型训练</div>
                 </div>
-                <div class="step-meta" th:text="${expHasModelResult ? '已有训练结果' : '未训练（点击左侧⑥）'}">未训练</div>
+                <div class="step-meta" th:text="${expHasModelResult ? '已有训练结果' : '未训练（点击左侧⑤）'}">未训练</div>
             </div>
             <div class="step">
                 <div class="step-top">
-                    <div class="step-num">7</div>
+                    <div class="step-num">6</div>
                     <div class="step-title">生成测试数据</div>
                 </div>
                 <div class="step-meta">生成并查看效率图</div>

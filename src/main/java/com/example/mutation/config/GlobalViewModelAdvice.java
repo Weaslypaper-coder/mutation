@@ -34,10 +34,11 @@ public class GlobalViewModelAdvice {
         if (currentPath == null) return 0;
         if (currentPath.startsWith("/experiment/program-test")) return 1;
         if (currentPath.startsWith("/parameter/setting")) return 3;
-        if (currentPath.startsWith("/experiment/correlation-heatmap")) return 4;
-        if (currentPath.startsWith("/experiment/correlation-graph")) return 5;
-        if (currentPath.startsWith("/model/training")) return 6;
-        if (currentPath.startsWith("/experiment/data-generation")) return 7;
+        if (currentPath.startsWith("/experiment/path-generation")) return 4;
+        if (currentPath.startsWith("/experiment/correlation-heatmap")) return 4; // 兼容旧路径
+        if (currentPath.startsWith("/experiment/correlation-graph")) return 4;   // 兼容旧路径
+        if (currentPath.startsWith("/model/training")) return 5;
+        if (currentPath.startsWith("/experiment/data-generation")) return 6;
         if (currentPath.startsWith("/experiment")) return 1;
         return 0;
     }
@@ -63,6 +64,16 @@ public class GlobalViewModelAdvice {
         return experimentService.countMutants() > 0;
     }
 
+    @ModelAttribute("expPathCount")
+    public int expPathCount() {
+        return experimentService.countPaths();
+    }
+
+    @ModelAttribute("expHasPaths")
+    public boolean expHasPaths() {
+        return experimentService.countPaths() > 0;
+    }
+
     @ModelAttribute("expHasParameter")
     public boolean expHasParameter() {
         ExperimentParameter p = parameterService.getCurrentParameter();
@@ -78,8 +89,9 @@ public class GlobalViewModelAdvice {
     public boolean expAllDone(@ModelAttribute("expHasProgram") boolean expHasProgram,
                               @ModelAttribute("expHasMutants") boolean expHasMutants,
                               @ModelAttribute("expHasParameter") boolean expHasParameter,
+                              @ModelAttribute("expHasPaths") boolean expHasPaths,
                               @ModelAttribute("expHasModelResult") boolean expHasModelResult) {
-        return expHasProgram && expHasMutants && expHasParameter && expHasModelResult;
+        return expHasProgram && expHasMutants && expHasParameter && expHasPaths && expHasModelResult;
     }
 }
 

@@ -35,7 +35,7 @@
         <div class="notice notice-warn" th:if="${!expAllDone}">
             <div>
                 <div class="notice-title">实验尚未全部完成</div>
-                <div class="notice-text">你仍可预览报告结构，但建议先完成：导入程序 → 生成分支 → 参数设置 → 模型训练。</div>
+                <div class="notice-text">你仍可预览报告结构，但建议先完成：导入程序 → 生成分支 → 参数设置 → 生成路径 → 模型训练。</div>
             </div>
             <div class="notice-actions">
                 <a th:href="@{/experiment/program-test}" class="btn-primary" style="padding:8px 14px;">返回实验工作台</a>
@@ -50,6 +50,10 @@
             <div class="stat-card">
                 <div class="stat-label">变异分支数</div>
                 <div class="stat-value" th:text="${mutantCount}">0</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">生成路径数</div>
+                <div class="stat-value" th:text="${expPathCount}">0</div>
             </div>
             <div class="stat-card">
                 <div class="stat-label">训练状态</div>

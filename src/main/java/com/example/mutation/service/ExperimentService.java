@@ -11,6 +11,7 @@ import java.util.List;
 public class ExperimentService {
 
     private final List<MutantBranch> mutantBranches = new ArrayList<>();
+    private final List<String> generatedPaths = new ArrayList<>();
     private Program currentProgram;
 
     public Program getCurrentProgram() {
@@ -27,6 +28,7 @@ public class ExperimentService {
 
     public void clearMutantBranches() {
         mutantBranches.clear();
+        generatedPaths.clear();
     }
 
     public void generateMutants(int count) {
@@ -35,6 +37,34 @@ public class ExperimentService {
             long id = existing + i;
             mutantBranches.add(new MutantBranch(id, "Mutant_" + id));
         }
+    }
+
+    public void clearPaths() {
+        generatedPaths.clear();
+    }
+
+    /**
+     * 演示用：基于已有变异分支生成“路径集合”。
+     * 在真实系统中，这里会基于相关度矩阵与相关图做路径选择/覆盖优化。
+     */
+    public void generatePaths(int count) {
+        generatedPaths.clear();
+        int n = Math.min(count, mutantBranches.size() > 0 ? mutantBranches.size() : count);
+        for (int i = 1; i <= n; i++) {
+            generatedPaths.add("Path_" + i + " (from Mutant_" + i + ")");
+        }
+        // 若没有分支也能演示生成
+        for (int i = n + 1; i <= count; i++) {
+            generatedPaths.add("Path_" + i);
+        }
+    }
+
+    public List<String> getGeneratedPaths() {
+        return new ArrayList<>(generatedPaths);
+    }
+
+    public int countPaths() {
+        return generatedPaths.size();
     }
 
     public int countMutants() {
