@@ -42,7 +42,8 @@ public class ExperimentController {
         Program program = programService.create(programName, language);
         experimentService.setCurrentProgram(program);
         redirectAttributes.addAttribute("msg", "已创建实验：" + programName + "（" + language + "）");
-        return "redirect:/experiment/program-test";
+        return "redirect:/experiment/program-test"; //
+
     }
 
     @GetMapping("/program-test")
@@ -68,6 +69,7 @@ public class ExperimentController {
         experimentService.generateMutants(20);
         redirectAttributes.addAttribute("msg", "已生成 20 个变异分支（Mutant_1 ~ Mutant_20）");
         return "redirect:/experiment/program-test";
+        //
     }
 
     @GetMapping("/correlation-heatmap")
